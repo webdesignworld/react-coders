@@ -1,41 +1,43 @@
 import React, { useState } from "react";
 import coding from "../assets/images/coding.png";
 import { Link, useNavigate } from "react-router-dom";
-import {useSelector, useDispatch} from 'react-redux';
-import {login} from '../store/features/auth/authSlice';
+import { useSelector, useDispatch } from "react-redux";
+import { login } from "../store/features/auth/authSlice";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
+}
+const { email, password } = formData;
+
+const dispatch = useDispatch();
+
+const { use, isLoading, isSuccess, message } = useSelector(
+  (state) => state.auth
+);
+
+const navigate = useNavigate();
+
+const onChange = (e) => {
+  setFormData((prevState) => ({
+    ...prevState,
+    [e.target.id]: e.target.value,
+  }));
 };
-  const { email, password } = formData;
-
-  const dispatch = useDispatch();
-
-  const {use, isLoading, isSuccess, message} = useSelector((state) => state.auth)
-
-  const navigate = useNavigate();
-
-  const onChange = (e) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [e.target.id]: e.target.value,
-    }));
-  };
-  const onSubmit = (e) => {
-    e.preventDefault();
-    if (!password.includes('@')) {
-      toast.error('Password must contain an "@" symbol');
-   } else {
+const onSubmit = (e) => {
+  e.preventDefault();
+  if (!password.includes("@")) {
+    toast.error('Password must contain an "@" symbol');
+  } else {
     const userData = {
-          email,
-       password
-    }
-    dispatch (register(userData))
-   }
+      email,
+      password,
+    };
+    dispatch(register(userData));
+  }
 
   return (
     <div className="signup_mail flex justify-center items-center h-screen m-0 font-sans bg-background-color">
@@ -46,7 +48,10 @@ function Login() {
           alt="developer_avatar"
         />
 
-        <form onSubmit={onSubmit} className="w-6/12 p-5 flex flex-col justify-center">
+        <form
+          onSubmit={onSubmit}
+          className="w-6/12 p-5 flex flex-col justify-center"
+        >
           <h1 className="mb-5 text-primary-text-button-color font-bold text-center text-[32px]">
             Join Coders Now!
           </h1>
@@ -61,7 +66,7 @@ function Login() {
           />
 
           <input
-            type={showPassword ? 'text' : 'password'}
+            type={showPassword ? "text" : "password"}
             id="password"
             placeholder="Password"
             className="mb-[15px] p-2.5 border border-solid bg-main-color text-white placeholder-white"
@@ -77,10 +82,7 @@ function Login() {
           />
           <p className="mt-2.5 text-center text-[#666666]">
             New to code CLA? <br />
-            <Link
-              to="/signup"
-              className="text-[#007BFF] no-underline"
-            >
+            <Link to="/signup" className="text-[#007BFF] no-underline">
               Signup
             </Link>
           </p>
@@ -88,6 +90,6 @@ function Login() {
       </div>
     </div>
   );
-}
+};
 
 export default Login;
