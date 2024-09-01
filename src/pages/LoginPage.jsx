@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import coding from "../assets/images/coding.png";
 import { Link, useNavigate } from "react-router-dom";
+import {useSelector, useDispatch} from 'react-redux';
+import {login} from '../store/features/auth/authSlice';
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -8,8 +10,12 @@ function Login() {
     email: '',
     password: ''
   });
-
+};
   const { email, password } = formData;
+
+  const dispatch = useDispatch();
+
+  const {use, isLoading, isSuccess, message} = useSelector((state) => state.auth)
 
   const navigate = useNavigate();
 
@@ -19,13 +25,17 @@ function Login() {
       [e.target.id]: e.target.value,
     }));
   };
-
   const onSubmit = (e) => {
     e.preventDefault();
-    // to add authentication
-    console.log("Form submitted:", formData);
-    navigate('/'); // Redirect to homepage after login 
-  };
+    if (!password.includes('@')) {
+      toast.error('Password must contain an "@" symbol');
+   } else {
+    const userData = {
+          email,
+       password
+    }
+    dispatch (register(userData))
+   }
 
   return (
     <div className="signup_mail flex justify-center items-center h-screen m-0 font-sans bg-background-color">
